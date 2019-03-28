@@ -5,9 +5,16 @@
 # @Date  : 2019/3/22
 # @Desc  : Prediction method
 
-from prefixspan import PrefixSpan
-
 def includeTrk(pos, arr):
+    '''
+    return all sequences that consist of step pos
+    :param pos: label of step
+    :type pos: int
+    :param arr: Training set
+    :type arr: list
+    :return: list of all sequences that consist of step pos
+    :rtype: list
+    '''
     list = []
     for trk in arr:
         if pos in trk:
@@ -28,7 +35,7 @@ def seqInclude(seq, arr):
     return res
 
 def seqNextStep(current_seq, train_set):
-    '''predict the next step according to current sequent'''
+    '''predict the next step according to current sequence'''
     arr = seqInclude(current_seq, train_set)
     len_seq = len(current_seq)
     if arr:
@@ -38,13 +45,36 @@ def seqNextStep(current_seq, train_set):
         '''No prior knowledge, randomly pick a surrounding cell'''
         return current_seq[-1]+1
 
+
+def major(arr, current_step):
+    '''
+    Return the most possible next step according to current step
+    :param arr: Training set
+    :type arr: list
+    :param current_step: label of current step
+    :type current_step: int
+    :return: most possible label of the next step
+    :rtype: int
+    '''
+    dict = {}
+    for trk in arr:
+        for pos in range(len(trk)):
+            if trk[pos] == current_step and pos != len(trk)-1:
+                pre_step = dict.get(trk[pos+1], 0)
+                if pre_step:
+                    dict[trk[pos+1]]+=1
+                else:
+                    dict[trk[pos+1]] = 1
+    return max(dict, key=dict.get)
+
+
+
+
 def nextStep(current_step, train_set):
     '''predict the next step according to current step'''
     arr = includeTrk(current_step, train_set)
     if arr:
-        ps = PrefixSpan(arr)
-        cand = ps.topk(2, filter=lambda patt, matches: patt[0] == current_step)
-        nextstep = cand[1][1][1]
+        nextstep = major(arr, current_step)
         return nextstep
     else:
         '''No prior knowledge, randomly pick a surrounding cell'''

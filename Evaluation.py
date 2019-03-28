@@ -7,6 +7,19 @@
 
 import Predict as pre
 def evaluate(train_set, test_set, pos_seq):
+    '''
+    For each track in test_set
+    predict the last (pos_seq-1) step according to last (pos_seq) step
+    return the accuracy
+    :param train_set: train set, majority vote is based on the set
+    :type train_set: list
+    :param test_set: test set
+    :type test_set: list
+    :param pos_seq: prediction according position
+    :type pos_seq: int
+    :return: accuracy
+    :rtype: float
+    '''
     accuracy = 0.0
     idx = 0
     for trk in test_set:

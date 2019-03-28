@@ -3,29 +3,33 @@
 # @File  : map.py
 # @Author: Jeff Liu
 # @Date  : 2019/2/17
-# @Desc  :
+# @Desc  : main function
 
 import scipy.io
 import numpy as np
-import matplotlib.pyplot as plt
-import math
 
 '''Global setting'''
+#map size
 m_width = 720
 m_height = 480
+
+# defining grid size
 
 g_width = 72
 g_height = 48
 
+# cell size(depending on the grid size)
 cell_width = m_width/g_width
 cell_height = m_height/g_height
 
-#control bool value
+# control bool value
 bool_data_extract = 0
 bool_tran = 0
 bool_label = 0
 
 '''map discretization function'''
+
+
 def trk_trans(trk):
     '''
     Transform the each cordinate to according discretization vertex
@@ -39,6 +43,7 @@ def trk_trans(trk):
         y = (pos[1]/cell_height)
         pos[0] = x
         pos[1] = y
+
 
 def trk_shrink(trk):
     '''
@@ -67,6 +72,7 @@ def cord_equal(cord1, cord2):
     :rtype: bool
     '''
     return cord1[0] == cord2[0] and cord1[1] == cord2[1]
+
 
 '''Datafile extraction'''
 if bool_data_extract == 1:
@@ -123,8 +129,10 @@ if bool_label == 1:
     after_label_arr = np.array(label_arr)
     np.save('after_label_arr.npy', after_label_arr)
 
-af_label_arr = np.load('after_label_arr.npy',encoding="latin1")
 
+
+# import after labeled array
+af_label_arr = np.load('after_label_arr.npy',encoding="latin1")
 
 # number of tracks
 num_trk = len(af_label_arr)
@@ -144,11 +152,11 @@ import Evaluation as Eva
 from prefixspan import PrefixSpan
 
 
-num_step = 1
-tset = test_set[:2000]
-res = Eva.evaluate(train_set, tset, 2)
+tset = test_set
+#predict the last step according to the last second step
+res = Eva.evaluate(train_set, tset, 3)
+
+print(res)
 
 
-
-print ('hh')
 

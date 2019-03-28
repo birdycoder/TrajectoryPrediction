@@ -15,7 +15,8 @@ db = [
 ]
 
 ps = PrefixSpan(db)
-print(ps.topk(5, filter=lambda seq, matches: len(seq) == 2))
+print(ps.topk(5))
+print(ps.topk(1, filter=lambda seq, matches: matches[0][0] == 2))
 
 
 print ('haha')
