@@ -5,6 +5,9 @@
 # @Date  : 2019/3/29
 # @Desc  : main func
 
+import map
+import Evaluation as eva
+import numpy as np
 
 # map size
 m_width = 720
@@ -24,9 +27,8 @@ bool_data_extract = 0
 bool_tran = 0
 bool_label = 0
 
-import map
-import Evaluation as eva
-import numpy as np
+
+
 
 def run(mode, g_width, g_height):
     data = np.load('Transformed_DATA/after_label_arr'+'('+ str(g_width) + 'X' + str(g_height)+')' + '.npy', encoding="latin1")
