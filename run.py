@@ -11,9 +11,9 @@ m_width = 720
 m_height = 480
 
 # defining grid size
-g_width = 36
-g_height = 24
-mode = 1
+g_width = 72
+g_height = 48
+mode = 2
 
 # cell size(depending on the grid size)
 cell_width = m_width/g_width
@@ -45,7 +45,7 @@ def run(mode, g_width, g_height):
         print('Predicting the last step of each track according its second last step')
         print('Accuracy: ' + str(res))
     if mode == 2:
-        res = eva.seq_evaluate(train_set, test_set, 3, 2)
+        res = eva.seq_evaluate(train_set, test_set, 4, 3)
         print('Predicting the last step of each track according its second and third last step(sequence)')
         print('Accuracy: ' + str(res))
 
