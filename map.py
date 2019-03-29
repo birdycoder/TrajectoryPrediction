@@ -15,8 +15,8 @@ m_height = 480
 
 # defining grid size
 
-g_width = 72
-g_height = 48
+g_width = 36
+g_height = 24
 
 # cell size(depending on the grid size)
 cell_width = m_width/g_width
@@ -75,8 +75,8 @@ def cord_equal(cord1, cord2):
 
 
 '''Datafile extraction'''
-if bool_data_extract == 1:
-    dataFile = 'matlab_tracklets.mat'
+if bool_data_extract:
+    dataFile = 'DATA/matlab_tracklets.mat'
     data_original = scipy.io.loadmat(dataFile)
     _trks_original = data_original['trks'][0]
     data_train = _trks_original[0:]
@@ -93,26 +93,24 @@ if bool_data_extract == 1:
         trk_list.append(path)
         print ('track added')
     trk_array = np.array(trk_list)
-    np.save('trk_arr.npy',trk_array)
+    np.save('Transformed_DATA/trk_arr.npy',trk_array)
 
 
-if bool_tran == 1:
+if bool_tran:
     '''Read data (numpy array)'''
-    trk_arr = np.load('trk_arr.npy')
+    trk_arr = np.load('Transformed_DATA/trk_arr.npy', encoding="latin1")
 
     '''track transform and shrink'''
     for trk in trk_arr[:]:
         trk_trans(trk)
+        print('transforming')
     print ('transform done')
 
     for idx in range(len(trk_arr)):
         trk_arr[idx] = trk_shrink(trk_arr[idx])
     print ('shrinking done')
-    np.save('after_tran_arr.npy', trk_arr)
+    np.save('Transformed_DATA/after_tran_arr'+'('+ str(g_width) + 'X' + str(g_height)+')' + '.npy', trk_arr)
 
-
-
-af_arr = np.load('after_tran_arr.npy')
 
 '''label function'''
 def trkToLabel(trk):
@@ -122,17 +120,20 @@ def trkToLabel(trk):
         trk_label.append(label)
     return trk_label
 
-if bool_label == 1:
+
+if bool_label:
+    af_arr = np.load('Transformed_DATA/after_tran_arr' + '(' + str(g_width) + 'X' + str(g_height) + ')' + '.npy',
+                     encoding="latin1")
     label_arr = []
     for trk in af_arr:
         label_arr.append(trkToLabel(trk))
     after_label_arr = np.array(label_arr)
-    np.save('after_label_arr.npy', after_label_arr)
+    np.save('Transformed_DATA/after_label_arr'+'('+ str(g_width) + 'X' + str(g_height)+')' + '.npy', after_label_arr)
 
 
 
 # import after labeled array
-af_label_arr = np.load('after_label_arr.npy',encoding="latin1")
+af_label_arr = np.load('Transformed_DATA/after_label_arr(36X24).npy', encoding="latin1")
 
 # number of tracks
 num_trk = len(af_label_arr)
@@ -149,14 +150,26 @@ test_set = af_label_arr[(int(num_trk*0.8)):]
 
 import Predict as Pre
 import Evaluation as Eva
-from prefixspan import PrefixSpan
 
 
 tset = test_set
-#predict the last step according to the last second step
-res = Eva.evaluate(train_set, tset, 3)
 
-print(res)
+
+#72x48
+#predict the last step according to the last second step
+#res = Eva.evaluate(train_set, tset, 2)
+#one step result: 38.76%
+
+# two_step_res = Eva.seq_evaluate(train_set, tset, 3, 2)
+# two step accuracy = 50.76%
+
+
+# 36x24
+# predict last step accuracy: 40.86%
+
+# predict last step according to previous two step
+# accuracy = 55.84%
+
 
 
 

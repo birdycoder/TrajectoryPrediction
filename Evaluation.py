@@ -31,3 +31,17 @@ def evaluate(train_set, test_set, pos_seq):
         idx+=1
     accuracy = accuracy/len(test_set)
     return accuracy
+
+
+def seq_evaluate(train_set, test_set, start_pos, seq_len):
+    accuracy = 0.0
+    idx = 0
+    for trk in test_set:
+        current_seq = trk[-start_pos:(-start_pos+seq_len)]
+        pre_nextStep = pre.seqNextStep(current_seq, train_set)
+        true_nextStep = trk[-start_pos+seq_len]
+        accuracy += (true_nextStep == pre_nextStep)
+        print('Track ' + str(idx) + ' done')
+        idx += 1
+    accuracy = accuracy / len(test_set)
+    return accuracy

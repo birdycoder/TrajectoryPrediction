@@ -34,12 +34,29 @@ def seqInclude(seq, arr):
             pos_id+=1
     return res
 
+
+def majorSeq(arr, current_seq):
+    dict = {}
+    len_seq = len(current_seq)
+    for trk in arr:
+        for pos in range(len(trk)-len_seq):
+            if trk[pos:(pos+len_seq)] == current_seq and pos != len(trk)-len_seq:
+                pre_step = trk[(pos+len_seq)]
+                num_prestep = dict.get(pre_step, 0)
+                if num_prestep:
+                    dict[pre_step] += 1
+                else:
+                    dict[pre_step] = 1
+    if dict:
+        return max(dict, key=dict.get)
+    else:
+        return current_seq[-1]+1
+
 def seqNextStep(current_seq, train_set):
     '''predict the next step according to current sequence'''
     arr = seqInclude(current_seq, train_set)
-    len_seq = len(current_seq)
     if arr:
-        nextstep = nextStep(current_seq[-1], arr)
+        nextstep = majorSeq(arr, current_seq)
         return nextstep
     else:
         '''No prior knowledge, randomly pick a surrounding cell'''
@@ -65,7 +82,10 @@ def major(arr, current_step):
                     dict[trk[pos+1]]+=1
                 else:
                     dict[trk[pos+1]] = 1
-    return max(dict, key=dict.get)
+    if dict:
+        return max(dict, key=dict.get)
+    else:
+        return current_step+1
 
 
 
