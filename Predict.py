@@ -5,6 +5,13 @@
 # @Date  : 2019/3/22
 # @Desc  : Prediction method
 
+
+import map
+import random
+
+def stepInBorder(step):
+    if step < map.g_height or step > map.g_width*(map.g_height-1):
+        pass
 def includeTrk(pos, arr):
     '''
     return all sequences that consist of step pos
@@ -35,6 +42,25 @@ def seqInclude(seq, arr):
     return res
 
 
+def rand_walk(cur_step):
+    option = [cur_step+1, cur_step-1, cur_step-map.g_height, cur_step+map.g_height]
+    nextstep = random.choice(option)
+    # elif stepInUp(cur_step):
+    #     option = [cur_step-1, cur_step - map.g_height, cur_step+map.g_height]
+    #     nextstep = random.choice(option)
+    # elif stepIndown(cur_step):
+    #     option = [cur_step + 1, cur_step - map.g_height, cur_step + map.g_height]
+    #     nextstep = random.choice(option)
+    # elif stepInLeft(cur_step):
+    #     option = [cur_step + 1, cur_step - 1, cur_step + map.g_height]
+    #     nextstep = random.choice(option)
+    # elif stepInRight(cur_step):
+    #     option = [cur_step + 1, cur_step - 1, cur_step - map.g_height]
+    #     nextstep = random.choice(option)
+    return nextstep
+
+
+
 def majorSeq(arr, current_seq):
     dict = {}
     len_seq = len(current_seq)
@@ -50,7 +76,9 @@ def majorSeq(arr, current_seq):
     if dict:
         return max(dict, key=dict.get)
     else:
-        return current_seq[-1]+1
+        print('randomly pick a step')
+        nextstep = rand_walk(current_seq[-1])
+        return nextstep
 
 def seqNextStep(current_seq, train_set):
     '''predict the next step according to current sequence'''
@@ -60,6 +88,7 @@ def seqNextStep(current_seq, train_set):
         return nextstep
     else:
         '''No prior knowledge, randomly pick a surrounding cell'''
+        print('randomly pick a step')
         return current_seq[-1]+1
 
 
@@ -86,8 +115,6 @@ def major(arr, current_step):
         return max(dict, key=dict.get)
     else:
         return current_step+1
-
-
 
 
 def nextStep(current_step, train_set):

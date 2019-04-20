@@ -53,6 +53,11 @@ def trk_shrink(trk):
     :return: track after shrinking
     :rtype: ndarray
     '''
+    # for i in range(len(trk) - 1, -1, -1):
+    #     # If current num is the same as the previous, delete it
+    #     if i != 0 and cord_equal(trk[i],trk[i-1]):
+    #         del trk[i]
+    # return trk
     new_trk = []
     for idx in range(len(trk)-1):
         if not cord_equal(trk[idx],trk[idx+1]):
@@ -155,20 +160,7 @@ import Evaluation as Eva
 tset = test_set
 
 
-#72x48
-#predict the last step according to the last second step
-#res = Eva.evaluate(train_set, tset, 2)
-#one step result: 38.76%
 
-# two_step_res = Eva.seq_evaluate(train_set, tset, 3, 2)
-# two step accuracy = 50.76%
-
-
-# 36x24
-# predict last step accuracy: 40.86%
-
-# predict last step according to previous two step
-# accuracy = 55.84%
 
 
 

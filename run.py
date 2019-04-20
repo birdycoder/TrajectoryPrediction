@@ -47,9 +47,32 @@ def run(mode, g_width, g_height):
         print('Predicting the last step of each track according its second last step')
         print('Accuracy: ' + str(res))
     if mode == 2:
-        res = eva.seq_evaluate(train_set, test_set, 4, 3)
+        res = eva.seq_evaluate(train_set, test_set[:100], 4, 3)
         print('Predicting the last step of each track according its second and third last step(sequence)')
         print('Accuracy: ' + str(res))
 
 
 run(mode, g_width, g_height)
+
+# grid size: 72x48
+# predict the last step according to the last second step
+#res = Eva.evaluate(train_set, tset, 2)
+# one step result: 38.76%
+
+# predict last step according to the previous two step
+# two_step_res = Eva.seq_evaluate(train_set, tset, 3, 2)
+# two step accuracy = 50.76%
+
+# predict last step according to the previous 3 steps
+# two_step_res = Eva.seq_evaluate(train_set, tset, 4, 3)
+# two step accuracy = 58.72%
+
+
+# grid size: 36x24
+# 1.predict the last step according to the last second step
+# accuracy: 40.86%
+# 2.predict last step according to previous two step
+# accuracy = 55.84%
+
+
+
