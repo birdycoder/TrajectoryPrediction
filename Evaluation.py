@@ -45,3 +45,16 @@ def seq_evaluate(train_set, test_set, start_pos, seq_len):
         idx += 1
     accuracy = accuracy / len(test_set)
     return accuracy
+
+def ter_evaluate(train_set, test_set, start_pos, seq_len):
+    accuracy = 0.0
+    idx = 0
+    for trk in test_set:
+        current_seq = trk[start_pos:(start_pos+seq_len)]
+        pre_terminal = pre.terminPredict(current_seq, train_set)
+        true_terminal = trk[-1]
+        accuracy += (true_terminal == pre_terminal)
+        print('Track ' + str(idx) + ' done')
+        idx += 1
+    accuracy = accuracy / len(test_set)
+    return accuracy

@@ -127,6 +127,36 @@ def nextStep(current_step, train_set):
         '''No prior knowledge, randomly pick a surrounding cell'''
         return current_step + 1
 
+def majorTerm(arr, current_seq):
+    dict = {}
+    len_seq = len(current_seq)
+    for trk in arr:
+        for pos in range(len(trk)-len_seq):
+            if trk[pos:(pos+len_seq)] == current_seq and pos != len(trk)-len_seq:
+                pre_Term = trk[-1]
+                num_Term = dict.get(pre_Term, 0)
+                if num_Term:
+                    dict[pre_Term] += 1
+                else:
+                    dict[pre_Term] = 1
+    if dict:
+        return max(dict, key=dict.get)
+    else:
+        print('randomly pick a step')
+        nextstep = rand_walk(current_seq[-1])
+        return nextstep
+
+
+def terminPredict(current_seq, train_set):
+    arr = seqInclude(current_seq, train_set)
+    if arr:
+        terminal = majorTerm(arr, current_seq)
+        return terminal
+    else:
+        '''No prior knowledge, randomly pick a surrounding cell'''
+        print('randomly pick a step')
+        return current_seq[-1]+1
+
 # def trk_predict(train_set, test_set, depend_trk, num_step):
 #     '''
 #     :param train_set:
