@@ -56,7 +56,7 @@ def run(mode, g_width, g_height):
         print('Accuracy: ' + str(res))
 
 
-run(mode, g_width, g_height)
+#run(mode, g_width, g_height)
 
 # grid size: 72x48
 # predict the last step according to the last second step

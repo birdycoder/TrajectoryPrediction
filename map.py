@@ -15,8 +15,8 @@ m_height = 480
 
 # defining grid size
 
-g_width = 36
-g_height = 24
+g_width = 72
+g_height = 48
 
 # cell size(depending on the grid size)
 cell_width = m_width/g_width
@@ -137,27 +137,27 @@ if bool_label:
 
 
 
-# import after labeled array
-af_label_arr = np.load('Transformed_DATA/after_label_arr(36X24).npy', encoding="latin1")
-
-# number of tracks
-num_trk = len(af_label_arr)
-# transfer label track to list type
-af_label_arr.tolist()
-
-'''train set and test set setup
-    80% training set and rest test set'''
-train_set = af_label_arr[:(int(num_trk*0.8))]
-test_set = af_label_arr[(int(num_trk*0.8)):]
-
-
-
-
-import Predict as Pre
-import Evaluation as Eva
-
-
-tset = test_set
+# # import after labeled array
+# af_label_arr = np.load('Transformed_DATA/after_label_arr(36X24).npy', encoding="latin1")
+#
+# # number of tracks
+# num_trk = len(af_label_arr)
+# # transfer label track to list type
+# af_label_arr.tolist()
+#
+# '''train set and test set setup
+#     80% training set and rest test set'''
+# train_set = af_label_arr[:(int(num_trk*0.8))]
+# test_set = af_label_arr[(int(num_trk*0.8)):]
+#
+#
+#
+#
+# import Predict as Pre
+# import Evaluation as Eva
+#
+#
+# tset = test_set
 
 
 
