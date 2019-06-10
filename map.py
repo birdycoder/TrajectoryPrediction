@@ -138,7 +138,9 @@ if bool_label:
 
 
 # # import after labeled array
-# af_label_arr = np.load('Transformed_DATA/after_label_arr(36X24).npy', encoding="latin1")
+af_label_arr = np.load('Transformed_DATA/after_tran_arr(72X48).npy', encoding="latin1")
+
+print('a')
 #
 # # number of tracks
 # num_trk = len(af_label_arr)

@@ -31,7 +31,7 @@ data = np.load(os.path.dirname(os.getcwd())+'/Transformed_DATA/after_label_arr'+
 
 
 def get_featurevec(threshold, data):
-    fssdata = np.load(os.path.dirname(os.getcwd())+'/Transformed_DATA/confssData-th'+str(threshold)+'.npy', encoding="latin1")
+    fssdata = np.load(os.path.dirname(os.getcwd())+'/Transformed_DATA/confssData2-th'+str(threshold)+'.npy', encoding="latin1")
     vec_list = []
     for idx, sample in enumerate(data):
         vec = feature_fetch(fssdata, sample)
@@ -40,4 +40,16 @@ def get_featurevec(threshold, data):
     vec_list = np.array(vec_list)
     np.save(os.path.dirname(os.getcwd())+'/Transformed_DATA/featureVecData-th'+str(threshold)+'.npy', vec_list)
 
-get_featurevec(100, data)
+
+feature_data = np.load(os.path.dirname(os.getcwd())+'/Transformed_DATA/featureVecData-th200.npy', encoding="latin1")
+
+count = 0
+new_list = []
+for idx, sample in enumerate(data):
+    temp = np.append(feature_data[idx], sample[-1])
+    new_list.append(temp)
+
+new_list = np.array(new_list)
+np.save(os.path.dirname(os.getcwd())+'/FeatureDATA/featureData-th200.npy', new_list)
+
+print('a')

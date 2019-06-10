@@ -28,7 +28,8 @@ def fssextract(threshold):
     data_num = int(len(data)*0.8)
     data = data[:data_num]
     ps = PrefixSpan(data)
-    res = ps.frequent(threshold, filter=lambda patt, matches: len(patt) >= 2)
+    #res = ps.frequent(threshold, filter=lambda patt, matches: len(patt) >= 2)
+    res = ps.frequent(threshold)
 
     list = []
     for i in res:
@@ -37,11 +38,11 @@ def fssextract(threshold):
         record.append(i[0])
         list.append(record)
     npdata = np.array(list)
-    np.save('Transformed_DATA/fssData-th'+str(threshold)+'.npy',npdata)
+    np.save('Transformed_DATA/fssData2-th'+str(threshold)+'.npy',npdata)
 
 
 def confss_tran(threshold):
-    fssdata = np.load('Transformed_DATA/fssData-th'+str(threshold)+'.npy', encoding="latin1")
+    fssdata = np.load('Transformed_DATA/fssData2-th'+str(threshold)+'.npy', encoding="latin1")
     cand_seq = fssdata[..., 0]
     con_fss = []
     for idx in range(len(cand_seq)):
@@ -49,11 +50,11 @@ def confss_tran(threshold):
             con_fss.append(fssdata[idx])
 
     con_fss = np.array(con_fss)
-    np.save('Transformed_DATA/confssData-th'+str(threshold)+'.npy', con_fss)
+    np.save('Transformed_DATA/confssData2-th'+str(threshold)+'.npy', con_fss)
 
 
-fssextract(10)
-confss_tran(10)
+fssextract(200)
+confss_tran(200)
 # if bool_extractdata:
 #     data = np.load('Transformed_DATA/after_label_arr'+'('+ str(g_width) + 'X' + str(g_height)+')' + '.npy', encoding="latin1")
 #     data_num = int(len(data)*0.8)

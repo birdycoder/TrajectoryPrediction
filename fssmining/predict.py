@@ -65,8 +65,8 @@ def longest_match(seq, fss_set):
             return cand_fss
         cand_fss = new_cand
         seq_len += 1
+        print('a'+str(seq_len))
     return cand_fss
-
 
 
 def seqNextStep(fss_set, cur_trk):
@@ -130,8 +130,8 @@ def seq_evaluate(train_set, test_set, ktt_pos):
     idx = 0
     for trk in test_set:
         cur_trk = trk[:-ktt_pos]
-        pre_nextStep = seqNextStep(train_set, cur_trk)
         true_nextStep = trk[-ktt_pos]
+        pre_nextStep = seqNextStep(train_set, cur_trk)
         accuracy += (true_nextStep == pre_nextStep)
         print('Track ' + str(idx) + ' done')
         idx += 1
@@ -155,12 +155,14 @@ train_set = data[:(int(num_trk * 0.8))]
 test_set = data[(int(num_trk * 0.8)):]
 
 
-print(seq_evaluate(fssdata, test_set, 1))
+print(seq_evaluate(fssdata, test_set, 3))
 
-#72*48, 50th, last step, 33.04%
-#72*48, 100th, last step, 31.30%
-#72*48, 200th, last step, 27.96%
 
-#seq, last step, 200th, 27.39%
-#seq, last step, 100th, 31.92%
-#seq, last step, 50th, 33.89%
+# 72*48, 200th, last step, 27.96%
+# 72*48, 100th, last step, 31.30%
+# 72*48, 50th, last step, 33.04%
+
+
+# seq, last step, 200th, 27.39%
+# seq, last step, 100th, 31.92%
+# seq, last step, 50th, 33.89%

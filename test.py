@@ -5,7 +5,34 @@
 # @Date  : 2019/3/16
 # @Desc  : for testing
 
-import numpy as np
-af_arr = np.load('Transformed_DATA/after_tran_arr.npy',
-                     encoding="latin1")
-print('a')
+def findDuplicate(nums):
+    """
+    :type nums: List[int]
+    :rtype: int
+    """
+    total = len(nums)
+
+    start = 1
+    end = total
+
+    while (start <= end):
+        if start == end:
+            return start
+        mid = int((end + start) / 2)
+        count = counter(nums, start, mid)
+        if count > (mid - start + 1):
+            end = mid
+        else:
+            start = mid + 1
+    return start
+
+
+def counter(arr, start, end):
+    res = 0
+    for i in arr:
+        if i >= start and i <= end:
+            res += 1
+    return res
+
+print(findDuplicate([1,2,3,4,4]))
+
