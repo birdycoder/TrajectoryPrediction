@@ -3,4 +3,6 @@
 # @File  : kerasNN.py
 # @Author: Jeff Liu
 # @Date  : 2019/5/29
-# @Desc  : 
+# @Desc  :
+
+import keras

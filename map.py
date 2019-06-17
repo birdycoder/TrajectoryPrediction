@@ -135,11 +135,49 @@ if bool_label:
     after_label_arr = np.array(label_arr)
     np.save('Transformed_DATA/after_label_arr'+'('+ str(g_width) + 'X' + str(g_height)+')' + '.npy', after_label_arr)
 
-
+af_arr = np.load('Transformed_DATA/after_label_arr' + '(' + str(g_width) + 'X' + str(g_height) + ')' + '.npy',
+                 encoding="latin1")
 
 # # import after labeled array
-af_label_arr = np.load('Transformed_DATA/after_tran_arr(72X48).npy', encoding="latin1")
+# af_label_arr = np.load('Transformed_DATA/after_tran_arr(72X48).npy', encoding="latin1")
+#
+def num_bon_len(threshold, dataset):
+    '''
+    count the number of trk that have a len lower than threshold
+    :param threshold:
+    :type threshold:
+    :param dataset:
+    :type dataset:
+    :return:
+    :rtype:
+    '''
+    count = 0
+    for i in dataset:
+        if len(i) <= threshold:
+            count += 1
+    return count
 
+def len_sort(threshold, dataset):
+    '''
+    sort out all trk that have len longer than threshold
+    :param threshold:
+    :type threshold:
+    :param dataset:
+    :type dataset:
+    :return:
+    :rtype:
+    '''
+    after_sort = []
+    for i in dataset:
+        if len(i) >= threshold:
+            after_sort.append(i)
+    return after_sort
+
+res = num_bon_len(7, af_arr)
+
+after_sort = len_sort(8, af_arr)
+
+np.save('processedDATA/lenSortDATA'+'('+ str(g_width) + 'X' + str(g_height)+')' + 'th8.npy', after_sort)
 print('a')
 #
 # # number of tracks

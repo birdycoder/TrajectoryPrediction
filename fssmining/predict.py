@@ -81,11 +81,11 @@ def seqNextStep(fss_set, cur_trk):
         res_cand = np.array(res_cand)
         major_trk = res_cand[np.argmax(res_cand[:, 1])][0]
         nextstep = major_trk[major_trk.index(cur_step) + 1]
-        return nextstep
+        return nextstep, 0
     else:
         '''No prior knowledge, randomly pick a surrounding cell'''
         print('randomly pick a step')
-        return rand_walk(cur_step)
+        return rand_walk(cur_step), 1
 
 
 
@@ -128,20 +128,21 @@ def seq_evaluate(train_set, test_set, ktt_pos):
     '''
     accuracy = 0.0
     idx = 0
+    total = len(test_set)
     for trk in test_set:
         cur_trk = trk[:-ktt_pos]
         true_nextStep = trk[-ktt_pos]
-        pre_nextStep = seqNextStep(train_set, cur_trk)
+        pre_nextStep, count = seqNextStep(train_set, cur_trk)
         accuracy += (true_nextStep == pre_nextStep)
         print('Track ' + str(idx) + ' done')
         idx += 1
-    accuracy = accuracy / len(test_set)
+    accuracy = accuracy / total
     return accuracy
 
 g_width = 72
 g_height = 48
 data = np.load(os.path.dirname(os.getcwd())+'/Transformed_DATA/after_label_arr'+'('+ str(g_width) + 'X' + str(g_height)+')' + '.npy', encoding="latin1")
-fssdata = np.load(os.path.dirname(os.getcwd())+'/Transformed_DATA/confssData-th100.npy', encoding="latin1")
+fssdata = np.load(os.path.dirname(os.getcwd())+'/Transformed_DATA/confssData-th200.npy', encoding="latin1")
 print(len(fssdata))
 
 # number of tracks
@@ -155,7 +156,7 @@ train_set = data[:(int(num_trk * 0.8))]
 test_set = data[(int(num_trk * 0.8)):]
 
 
-print(seq_evaluate(fssdata, test_set, 3))
+print(seq_evaluate(fssdata, test_set, 1))
 
 
 # 72*48, 200th, last step, 27.96%
