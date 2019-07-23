@@ -10,8 +10,7 @@ import numpy as np
 import os
 from sklearn import preprocessing
 from joblib import dump, load
-
-
+from preprocess import Endalarm
 
 
 def model_evaluate(model, testX, testY):
@@ -43,7 +42,7 @@ def getDirectLabel(pos, pre):
         return 4
 
 '''training data and test data setting'''
-feature_data = np.load(os.path.dirname(os.getcwd())+'/processedDATA/featureVecData-th8-fre100.npy', encoding="latin1")
+feature_data = np.load(os.path.dirname(os.getcwd())+'/processedDATA/ftrVecData-th8-fre100(vote&dir).npy', encoding="latin1")
 # trk_list = np.load(os.path.dirname(os.getcwd())+'/processedDATA/lenSortDATA(72X48)th8.npy', encoding="latin1")
 
 X = feature_data
@@ -63,20 +62,37 @@ test_X = X[length:]
 test_Y = Y[length:]
 
 
-bool_eva = 1
-train_model = 'SVMmodel(basic).joblib'
-test_model = 'SVMmodel(basic).joblib'
+bool_eva = 0
+train_model = 'SVMmodel(vote&dir).joblib'
+test_model = 'SVMmodel(vote&dir).joblib'
+song = 'song.mp3'
+
+import time
 
 if not bool_eva:
-    clf = svm.SVC(cache_size=600, gamma='scale', kernel='rbf', decision_function_shape='ovo', max_iter=-1, class_weight= 'balanced')
-    # clf = load('SVMmodel(dirNote).joblib')
+    clf = svm.SVC(C=3, cache_size=1000, gamma=0.001, kernel='rbf', decision_function_shape='ovo', max_iter=-1)
+
+    # clf.gamma =
+    # clf.class_weight = 'balanced'
     # clf.max_iter = -1
+
+
     # train
+    start = time.time()
     print('train begin...')
     clf.fit(train_X, train_Y)
     print('train finished')
+    end = time.time()
+    print('running time:'+str((end - start)/60.0)+ ' mins')
+
     # model save
     dump(clf, train_model)
+    print('Evaluation begin')
+    trainres = clf.score(train_X[:1000], train_Y[:1000])
+    testres = clf.score(test_X[:], test_Y[:])
+    print(trainres)
+    print(testres)
+    Endalarm.alarm(song)
 
 
 if bool_eva:
@@ -87,23 +103,70 @@ if bool_eva:
     # clf.fit(train_X, train_Y)
     # a = get_res(clf, test_X[:1000])
     print('Evaluation begin')
-    res = model_evaluate(clf, train_X[:100], train_Y[:100])
-    # res = model_evaluate(clf, test_X[:], test_Y[:])
-    print(res)
+    trainres = clf.score(train_X[:1000], train_Y[:1000])
+    testres = clf.score(test_X[:], test_Y[:])
+    # res = clf.score(train_X[:100], train_Y[:100])
 
+    # res = model_evaluate(clf, train_X[:10000], train_Y[:10000])
+    print(trainres)
+    print(testres)
+    Endalarm.alarm(song)
 
+    # C = 1, no scale
+    # model iter: until tol, fitness = 40.55%
+    # ftrVec X: ftrVecData-th8-fre100(dire).npy,
+    # based on the last move of corresponding fss(1,2,3,4),
+    # Y: based on on direction of the last move (1,2,3,4)
+
+    # C = 1, with scale
     # model iter: until tol(1e-3), fitness = 43.9%
-    # featureVec X: based on the move after corresponding fss(+1,-1, 48, -48), (preprocess: scale) \
+    # featureVec X: ftrVecData-th8-fre100(dire2)
+    # based on the move after corresponding fss(+1,-1, 48, -48), (preprocess: scale) \
     # Y: based on direction of the last move (1,2,3,4)
 
+    # C = 1, no scale
     # model iter: until tol, fitness = 43.5%
     # ftrVec X: ftrVecData-th8-fre100(dirNote).npy,
     # based on the move after corresponding fss(1,2,3,4),
     # Y: based on on direction of the last move (1,2,3,4)
-
 
     # C = 1, no scale
     # model iter: until tol, fitness = 42.75%
     # ftrVec X: ftrVecData-th8-fre100(basic).npy,
     # based on the existance of corresponding fss(1 if exist, else 0),
     # Y: based on direction of the last move (1,2,3,4)
+
+    # C = 3, no scale no weight balanced
+    # model iter: until tol, fitness = 37%
+    # ftrVec X: ftrVecData-th8-fre100(votelast).npy,
+    # based on the existance of corresponding fss(1 if exist, else 0),and last match fss vote direction
+    # Y: based on direction of the last move (1,2,3,4)
+
+    #
+    # C=1, cache_size=1000, gamma=0.1, kernel='rbf', decision_function_shape='ovo', max_iter=-1
+    # 44.86%
+
+    # C=1, cache_size=1000, gamma=0.05, kernel='rbf', decision_function_shape='ovo', max_iter=-1
+    # 46.12%
+
+    # C=1, cache_size=1000, gamma=0.01, kernel='rbf', decision_function_shape='ovo', max_iter=-1
+    # 43.4%
+
+    # C=3, cache_size=1000, gamma=0.05, kernel='rbf', decision_function_shape='ovo', max_iter=-1
+    # 47.08%
+
+    # C=5, cache_size=1000, gamma=0.05, kernel='rbf', decision_function_shape='ovo', max_iter=-1
+    # 46.54%
+
+    # C=3, cache_size=1000, gamma=0.05, kernel='rbf', decision_function_shape='ovo', class_weight='balanced', max_iter=-1)
+    # 46.98%
+
+    # vote&dir
+    # C = 3, cache_size = 1000, gamma = 0.05, kernel = 'rbf', decision_function_shape = 'ovo', max_iter = -1
+    # train ac 86.8, test ac 38.85
+
+    # C=3, cache_size=1000, gamma=0.01, kernel='rbf', decision_function_shape='ovo', max_iter=-1
+    # 78.5， 44.5
+
+    # C=3, cache_size=1000, gamma=0.006, kernel='rbf', decision_function_shape='ovo', max_iter=-1)
+    # 72.9 45.69
